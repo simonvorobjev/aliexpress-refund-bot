@@ -52,6 +52,15 @@ def update_db(update):
     user_name = update.message.from_user.username
     last_login = datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
     total_logins = str(1)
+    if not os.path.exists("mydatabase.db"):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("""CREATE TABLE users
+                  (user_id text primary key, user_name text, last_login text,
+                   total_logins text)
+               """)
+        conn.commit()
+        conn.close()
     conn = sqlite3.connect("mydatabase.db")
     cursor = conn.cursor()
     count = cursor.execute("SELECT * FROM users WHERE user_id=?", (user_id,)).fetchall()
